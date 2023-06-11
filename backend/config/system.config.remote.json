@@ -1,0 +1,14 @@
+{
+    "mode": "remote",
+    "dbConfig": {
+        "pass": "Banan123",
+        "user": "root",
+        "name": "main",
+        "options": {
+            "dialect": "mysql",
+            "host": "localhost",
+            "storage": null,
+            "logging": true
+        }
+    }
+}
