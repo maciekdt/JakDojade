@@ -3,7 +3,7 @@
     "dbConfig": {
         "pass": "Banan123",
         "user": "root",
-        "name": "main",
+        "name": "jakdojade",
         "options": {
             "dialect": "mysql",
             "host": "localhost",
