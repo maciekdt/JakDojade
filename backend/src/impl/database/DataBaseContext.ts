@@ -17,15 +17,14 @@ export class DataBaseContextImpl implements DataBaseContext {
     private client: Sequelize|null = null
     
     public async connect(): Promise<void> {
-        let config = (await this.system.getSystemConfig()).dbConfig
+        let config = (await this.system.getSystemConfig()).development
         this.client = new Sequelize(
-            config.name, 
-            config.user, 
-            (config.pass == null) ? undefined : config.pass, 
+            config.database, 
+            config.username, 
+            config.password, 
             {
-                dialect: config.options.dialect,
-                storage: (config.options.storage == null) ? undefined : config.options.storage,
-                host: (config.options.host == null) ? undefined : config.options.host
+                dialect: config.dialect,
+                host: config.host
             }
         )
         await this.client.authenticate()
@@ -33,19 +32,13 @@ export class DataBaseContextImpl implements DataBaseContext {
         this.createAssociations()
 
         //TEST
-        await this.build()
-        let s = await BusStop.create({name: "test", lat:10.88, lon:23.66})
-        let s2 = await BusStop.create({name: "test2", lat:10.88, lon:23.66})
-        let e = Connection.build({arrivalTime: "12:32:00", departureTime: "234", validFrom: new Date(1232), validTo: new Date(1111)})
-        let l = Line.build({name: "A", company: "WRO"})
-        await e.save()
-        await l.save()
+        let s = await BusStop.create({name: "test3", lat:10.88, lon:23.66})
+        let l = await Line.create({name: "A3", company: "WRO"})
+        let e = await Connection.create({arrivalTime: "12:32:00", departureTime: "234", validFrom: new Date(1232), validTo: new Date(1111)})
+        
+        
         await s.addStartEdge(e, undefined)
         await l.addConnectionEdge(e, undefined)
-    }
-
-    public async build(): Promise<void> {
-        await this.getClient().sync({ force: true })
     }
 
     public async closeConnection(): Promise<void> {
@@ -76,7 +69,6 @@ export class DataBaseContextImpl implements DataBaseContext {
                 },
                 name:{
                     type: DataTypes.STRING,
-                    unique: true,
                     allowNull: false
                 },
                 lon:{
@@ -120,7 +112,7 @@ export class DataBaseContextImpl implements DataBaseContext {
                 }
             },
             { 
-                tableName: 'ConnectionEdges',
+                tableName: 'Connections',
                 sequelize: this.client as Sequelize,
                 timestamps: false
             }
@@ -135,7 +127,6 @@ export class DataBaseContextImpl implements DataBaseContext {
                 },
                 name: {
                     type: DataTypes.STRING,
-                    unique: true,
                     allowNull: false
                 },
                 company: {

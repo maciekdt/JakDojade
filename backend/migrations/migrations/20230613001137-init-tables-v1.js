@@ -12,7 +12,6 @@ module.exports = {
             },
             name: {
                 type: DataTypes.STRING,
-                unique: true,
                 allowNull: false
             },
             lon: {
@@ -33,7 +32,6 @@ module.exports = {
             },
             name: {
                 type: DataTypes.STRING,
-                unique: true,
                 allowNull: false
             },
             company: {
@@ -66,7 +64,7 @@ module.exports = {
             },
             lineId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Lines',
                     key: 'id',
@@ -76,7 +74,7 @@ module.exports = {
             },
             startNodeId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'BusStopes',
                     key: 'id',
@@ -86,7 +84,7 @@ module.exports = {
             },
             endNodeId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'BusStopes',
                     key: 'id',

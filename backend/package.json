@@ -4,8 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node-dev --respawn ./src/index.ts ./config/system.config.remote.json",
-        "build": "tsc --project tsconfig.json"
+        "start": "ts-node-dev ./src/index.ts ./config/database.config.json",
+        "build": "tsc --project tsconfig.json",
+        "migrate": "sequelize db:migrate --config config/database.config.json --migrations-path migrations/migrations",
+        "migrate-undo": "sequelize db:migrate:undo --config config/database.config.json --migrations-path migrations/migrations"
     },
     "author": "Maciej Dutkowski",
     "license": "ISC",
