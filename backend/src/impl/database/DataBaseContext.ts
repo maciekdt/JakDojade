@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { DataBaseContext } from "../../interfaces/database";
 import { DataTypes, Sequelize } from "sequelize";
 import { TYPES } from "../../system/dependency/types";
-import { SystemConfigProvider } from "../../interfaces/helpers";
+import { SystemConfigProvider } from "../../interfaces/utils";
 import { BusStop } from "./db-models/BusStop";
 import { Connection } from "./db-models/Connection";
 import { Line } from "./db-models/Line";
@@ -24,21 +24,13 @@ export class DataBaseContextImpl implements DataBaseContext {
             config.password, 
             {
                 dialect: config.dialect,
-                host: config.host
+                host: config.host,
+                logging: false
             }
         )
         await this.client.authenticate()
         this.initTables()
         this.createAssociations()
-
-        //TEST
-        let s = await BusStop.create({name: "test3", lat:10.88, lon:23.66})
-        let l = await Line.create({name: "A3", company: "WRO"})
-        let e = await Connection.create({arrivalTime: "12:32:00", departureTime: "234", validFrom: new Date(1232), validTo: new Date(1111)})
-        
-        
-        await s.addStartEdge(e, undefined)
-        await l.addConnectionEdge(e, undefined)
     }
 
     public async closeConnection(): Promise<void> {

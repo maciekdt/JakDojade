@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
-import { TimeConvertert } from "../../interfaces/helpers"
+import { TimeConverter } from "../../interfaces/utils"
 
 @injectable()
-export class TimeConverterImpl implements TimeConvertert{
-    public convertToSecondsBeforeNoon(time: string): number {
+export class TimeConverterImpl implements TimeConverter{
+    public convert(time: string): number {
         let parts = time.split(":");
         let hours = parseInt(parts[0]);
         let minutes = parseInt(parts[1]);

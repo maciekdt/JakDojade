@@ -93,6 +93,21 @@ module.exports = {
                 onDelete: 'CASCADE',
             }
         })
+
+        await queryInterface.addIndex('Lines', ['name', 'company'], {
+            name: 'index_name_company',
+            unique: true
+        })
+
+        await queryInterface.addIndex('BusStopes', ['name', 'lon', 'lat'], {
+            name: 'index_name_lon_lat',
+            unique: true
+        })
+
+        await queryInterface.addIndex('Connections', ['validFrom'], {
+            name: 'index_valid_from',
+            unique: false
+        })
     },
 
 

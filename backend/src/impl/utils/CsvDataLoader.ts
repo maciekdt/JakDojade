@@ -6,6 +6,7 @@ import { DataBaseContext } from '../../interfaces/database'
 import { Line } from '../database/db-models/Line'
 import { BusStop } from '../database/db-models/BusStop'
 import { Connection } from '../database/db-models/Connection'
+import { DataLoader } from '../../interfaces/utils'
 
 interface CsvRow {
     company: string
@@ -21,13 +22,14 @@ interface CsvRow {
 }
 
 @injectable()
-export class DataLoader{
+export class CsvDataLoader implements DataLoader{
 
     public async loadData(validFrom: Date, validTo: Date){
-        fs.createReadStream('data/connection_graph.csv')
+        const stream = fs.createReadStream('upload/connection_graph.csv')
             .pipe(csvParser())
-            .on('data', (data: CsvRow) => {
-                
+
+        let i = 0;
+        for await (const data of stream){
                 let startStopAttr = { 
                     name: data.start_stop,
                     lat: data.start_stop_lat,
@@ -52,17 +54,18 @@ export class DataLoader{
                     company: data.company
                 }
 
-                let connection: Connection
-                let startStop: BusStop
-                let endStop: BusStop
-                let line: Line
+                
+                let [startStop] = await BusStop.findCreateFind({where: startStopAttr})
+                let [endStop] = await BusStop.findCreateFind({where: endStopAttr})
+                let [line] = await Line.findCreateFind({where: lineAttr})
+                let connection = await Connection.create(connectionAttr)
 
-                let x
-                Promise.all([
-                    x = BusStop.findCreateFind({where: startStopAttr})
-                ])
-            
+                await line.addConnectionEdge(connection, undefined)
+                await startStop.addStartEdge(connection, undefined)
+                await endStop.addEndEdge(connection, undefined)
 
-            })
+                i++
+                if(i%100 == 0) console.log("row : " + i)
+            }
     }
 }

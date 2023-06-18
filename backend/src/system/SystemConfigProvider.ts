@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import { injectable } from 'inversify'
 import { SystemConfig } from './SystemConfig'
-import { SystemConfigProvider } from '../interfaces/helpers'
+import { SystemConfigProvider } from '../interfaces/utils'
 
 
 @injectable()
