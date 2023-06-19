@@ -6,6 +6,8 @@ import { App } from "../../interfaces/app"
 import { appContainer } from "../../system/dependency/container"
 import { AppRouter } from "../../interfaces/routers"
 import { DataBaseContext } from "../../interfaces/database"
+import { Line } from "../database/db-models/Line"
+import cors from "cors"
 
 @injectable()
 export class AppImpl implements App {
@@ -20,8 +22,20 @@ export class AppImpl implements App {
     ){}
 
 	public async start(): Promise<Application> {
-        await this.startAsyncInitTasks()
+		let conect = false
+		while(!conect){
+			await new Promise(resolve => setTimeout(resolve, 5000))
+			try{
+				await this.dbContext.connect()
+				console.log("Connected to SQL server")
+				conect = true
+			}
+			catch(err){
+				console.error("SQL server refuses connection")
+			}
+		}
 		this.app.use(express.json())
+		this.app.use(cors())
 		this.app.get("/test-connection", (req, res) => { res.status(200).send() })
 
 		this.app.use("/nav", this.navRouter.getRouter())

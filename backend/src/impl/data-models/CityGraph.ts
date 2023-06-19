@@ -15,4 +15,8 @@ export class CityGraph{
     public getBusConnections(busStopId: number): ConnectionEdge[]|undefined{
         return this.stops.get(busStopId)
     }
+
+    public isBusStop(busStopId: number): boolean {
+        return this.stops.has(busStopId)
+    }
 }

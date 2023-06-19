@@ -1,0 +1,23 @@
+[{
+    "startBustStop": {
+        "id": 1126,
+        "name": "8 Maja",
+        "lon": 17.091098,
+        "lat": 51.1135437
+    },
+    "endBustStop": {
+        "id": 1126,
+        "name": "8 Maja",
+        "lon": 17.091098,
+        "lat": 51.1135437
+    },
+    "connection": {
+        "departureTime": "14:13:00",
+        "arrivalTime": "14:15:00"
+    },
+    "line": {
+        "id": 254,
+        "name": "7",
+        "company": "MPK"
+    }
+}]

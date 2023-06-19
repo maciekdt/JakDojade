@@ -26,41 +26,49 @@ export class NavRepoImpl implements NavRepo{
         return await BusStop.findByPk(id)
     }
 
+    public async getLineById(id: number): Promise<Line | null>{
+        return await Line.findByPk(id)
+    }
+
     public async getAllLines(): Promise<Line[]>{
         return await Line.findAll()
     }
 
+
+    public async getConnectionById(id: number): Promise<Connection | null>{
+        return await Connection.findByPk(id)
+    }
+
     public async findConnection(startNodeId: number, endNodeId: number, startTime: number): Promise<ConnectionEdge[]>{
-        let c = await this.createGraph()
-        let r = c.getBusConnections(startNodeId) as ConnectionEdge[]
-        return r
-        /*return this.alg.compute(
+        return this.alg.compute(
             await this.createGraph(), 
             startNodeId,
             endNodeId,
             startTime
-        )*/
+        )
     }
 
     private async createGraph(): Promise<CityGraph>{
         let graph = new CityGraph()
         for(const edge of await Connection.findAll()){
             let connectionEdge = new ConnectionEdge(
+                edge.id,
                 this.conv.convert(edge.departureTime),
                 this.conv.convert(edge.arrivalTime),
                 edge.startNodeId,
-                edge.endNodeId
+                edge.endNodeId,
+                edge.lineId
             )
 
-            if(graph.getBusConnections(connectionEdge.start)){
-                graph.addConnection(connectionEdge.start, connectionEdge)
+            if(graph.isBusStop(edge.startNodeId)){
+                graph.addConnection(edge.startNodeId, connectionEdge)
             }
             else{
-                graph.addBusStop(connectionEdge.start)
-                graph.addConnection(connectionEdge.start, connectionEdge)
+                graph.addBusStop(edge.startNodeId)
+                graph.addConnection(edge.startNodeId, connectionEdge)
             }
-            if(graph.getBusConnections(connectionEdge.destination)){
-                graph.addBusStop(connectionEdge.destination)
+            if(!graph.isBusStop(edge.endNodeId)){
+                graph.addBusStop(edge.endNodeId)
             }
         }
         return graph

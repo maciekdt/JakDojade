@@ -5,15 +5,19 @@
     "main": "index.js",
     "scripts": {
         "start": "ts-node-dev ./src/index.ts ./config/database.config.json",
+        "start-prod": "node ./dist/index.js ./config/database.config.json",
         "debug": "ts-node-dev --files --transpile-only --respawn --inspect=4321 --project tsconfig.json ./src/index.ts ./config/database.config.json",
         "build": "tsc --project tsconfig.json",
+        "host": "lt --port 8000 --subdomain maciekdt",
         "migrate": "sequelize db:migrate --config config/database.config.json --migrations-path migrations/migrations",
         "migrate-undo": "sequelize db:migrate:undo --config config/database.config.json --migrations-path migrations/migrations"
     },
     "author": "Maciej Dutkowski",
     "license": "ISC",
     "dependencies": {
+        "@types/cors": "^2.8.13",
         "@types/express": "^4.17.17",
+        "cors": "^2.8.5",
         "csv-parser": "^3.0.0",
         "express": "^4.18.2",
         "inversify": "^6.0.1",

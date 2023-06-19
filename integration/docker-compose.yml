@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  node-app:
+    image: maciekdt/jakdojade:node-app
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=Pass123
+      - DB_NAME=jakdojade
+
+  mysql:
+    image: maciekdt/jakdojade:mysql

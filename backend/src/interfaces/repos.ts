@@ -8,4 +8,6 @@ export interface NavRepo{
     getAllLines(): Promise<Line[]>
     getBusStopById(id: number): Promise<BusStop | null>
     findConnection(startNodeId: number, endNodeId: number, startTime: number): Promise<ConnectionEdge[]>
+    getLineById(id: number): Promise<Line | null>
+    getConnectionById(id: number): Promise<Connection | null>
 }

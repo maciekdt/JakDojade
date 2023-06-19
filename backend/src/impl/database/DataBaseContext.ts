@@ -19,13 +19,14 @@ export class DataBaseContextImpl implements DataBaseContext {
     public async connect(): Promise<void> {
         let config = (await this.system.getSystemConfig()).development
         this.client = new Sequelize(
-            config.database, 
-            config.username, 
-            config.password, 
+            process.env.DB_NAME ? process.env.DB_NAME : config.database, 
+            process.env.DB_USER ? process.env.DB_USER : config.username, 
+            process.env.DB_PASSWORD ? process.env.DB_PASSWORD : config.password, 
             {
                 dialect: config.dialect,
-                host: config.host,
-                logging: false
+                host: process.env.DB_HOST ? process.env.DB_HOST : config.host,
+                logging: true,
+                port: process.env.DB_PORT ? parseInt(process.env.DB_PORT as string) : undefined
             }
         )
         await this.client.authenticate()
@@ -73,7 +74,7 @@ export class DataBaseContextImpl implements DataBaseContext {
                 }
             },
             { 
-                tableName: 'BusStopes',
+                tableName: 'busstopes',
                 sequelize: this.client as Sequelize,
                 timestamps: false
             }
@@ -104,7 +105,7 @@ export class DataBaseContextImpl implements DataBaseContext {
                 }
             },
             { 
-                tableName: 'Connections',
+                tableName: 'connections',
                 sequelize: this.client as Sequelize,
                 timestamps: false
             }
@@ -127,7 +128,7 @@ export class DataBaseContextImpl implements DataBaseContext {
                 }
             },
             { 
-                tableName: 'Lines',
+                tableName: 'lines',
                 sequelize: this.client as Sequelize,
                 timestamps: false
             }
