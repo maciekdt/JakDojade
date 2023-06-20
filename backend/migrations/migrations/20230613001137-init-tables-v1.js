@@ -4,7 +4,7 @@ const { DataTypes } = require('sequelize');
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('BusStopes', {
+        await queryInterface.createTable('busstopes', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -24,7 +24,7 @@ module.exports = {
             }
         })
 
-        await queryInterface.createTable('Lines', {
+        await queryInterface.createTable('lines', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -40,7 +40,7 @@ module.exports = {
             }
         })
 
-        await queryInterface.createTable('Connections', {
+        await queryInterface.createTable('connections', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -66,7 +66,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: true,
                 references: {
-                    model: 'Lines',
+                    model: 'lines',
                     key: 'id',
                 },
                 onUpdate: 'CASCADE',
@@ -76,7 +76,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: true,
                 references: {
-                    model: 'BusStopes',
+                    model: 'busstopes',
                     key: 'id',
                 },
                 onUpdate: 'CASCADE',
@@ -86,7 +86,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: true,
                 references: {
-                    model: 'BusStopes',
+                    model: 'busstopes',
                     key: 'id',
                 },
                 onUpdate: 'CASCADE',
@@ -94,17 +94,17 @@ module.exports = {
             }
         })
 
-        await queryInterface.addIndex('Lines', ['name', 'company'], {
+        await queryInterface.addIndex('lines', ['name', 'company'], {
             name: 'index_name_company',
             unique: true
         })
 
-        await queryInterface.addIndex('BusStopes', ['name', 'lon', 'lat'], {
+        await queryInterface.addIndex('busstopes', ['name', 'lon', 'lat'], {
             name: 'index_name_lon_lat',
             unique: true
         })
 
-        await queryInterface.addIndex('Connections', ['validFrom'], {
+        await queryInterface.addIndex('connections', ['validFrom'], {
             name: 'index_valid_from',
             unique: false
         })
@@ -112,8 +112,8 @@ module.exports = {
 
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Connections');
-        await queryInterface.dropTable('BusStopes');
-        await queryInterface.dropTable('Lines');
+        await queryInterface.dropTable('connections');
+        await queryInterface.dropTable('busstopes');
+        await queryInterface.dropTable('lines');
     }
 };
